@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.product;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 @Service
@@ -17,8 +16,9 @@ public class ProductService {
 	public ProductService(ProductRepository productRepository) {
 		this.productRepository = productRepository;
 	}	
-    public List<Product> getProductsCheaperThan(double price) {
-        return null;
+	@Transactional(readOnly = true)
+    public List<Product> getProductsCheaperThan(double precio) {
+        return productRepository.findByPriceLessThan(precio);
     }
 
     public Product save(Product p){
@@ -29,5 +29,11 @@ public class ProductService {
     public ProductType getProductType(String name) {
     	return productRepository.findProductTypeByName(name);
     }
+    
+    @Transactional(readOnly = true)
+    public List<ProductType> getAllProductTypes(){
+        return productRepository.findAllProductTypes();
+    }
+    
     
 }
